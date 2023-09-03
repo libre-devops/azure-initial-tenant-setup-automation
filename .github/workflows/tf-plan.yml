@@ -10,9 +10,10 @@ jobs:
     name: 'Terraform Build'
     runs-on: ubuntu-latest
     env:
-      terraform-workspace: "prd"
-      checkov-skipped-tests: ""
-      terraform-compliance-policy-path: "https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
+      terraform_version: "1.5.5"
+      terraform_workspace: "prd"
+      checkov_skipped_tests: ""
+      terraform_compliance_policy_path: "https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
       ARM_CLIENT_ID: ${{ secrets.SpokeSvpClientId }}
       ARM_CLIENT_SECRET: ${{ secrets.SpokeSvpClientSecret }}
       ARM_TENANT_ID: ${{ secrets.SpokeTenantId }}
@@ -40,19 +41,19 @@ jobs:
       - name: Setup Tfenv and Install terraform
         id: setup-tfenv
         run: |
-          if [ -z "${terraform-version}" ]; then
-            echo "terraform-version is empty or not set., setting to latest" && export terraform-version="latest"
+          if [ -z "${terraform_version}" ]; then
+            echo "terraform_version is empty or not set., setting to latest" && export terraform_version="latest"
           
           else
-            echo "terraform-version is set, installing terraform version ${terraform-version}"
+            echo "terraform_version is set, installing terraform version ${terraform_version}"
           fi
 
-          tfenv install ${{ env.terraform-version }} && tfenv use ${{ env.terraform-version }}
+          tfenv install ${terraform_version} && tfenv use ${terraform_version}
 
       - name: Terraform Init, Validate & Plan
         id: terraform-init-validate-plan
         run: |
-          terraform workspace new ${{ env.terraform-workspace }} || terraform workspace select ${{ env.terraform-workspace }} && \
+          terraform workspace new ${terraform_workspace} || terraform workspace select $terraform_workspace
           terraform init && \
           terraform validate && \
           terraform plan -out tfplan
@@ -62,4 +63,4 @@ jobs:
         uses: terraform-compliance/github_action@0.3.0
         with:
           plan: "tfplan"
-          features: ${{ env.terraform-compliance-policy-path }}
+          features: ${{ env.terraform_compliance_policy_path }}
