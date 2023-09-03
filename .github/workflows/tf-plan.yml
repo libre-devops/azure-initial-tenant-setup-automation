@@ -19,6 +19,9 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.SpokeTenantId }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SpokeSubId }}
       ARM_USE_AZUREAD: true
+      ARM_BACKEND_STORAGE_ACCOUNT: ${{ secrets.SpokeSaName }}
+      ARM_BACKEND_BLOB_CONTAINER_NAME: ${{ secrets.SpokeSaBlobContainerName }}
+      ARM_BACKEND_STATE_KEY: "management-setup.terraform.tfstate"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -53,8 +56,11 @@ jobs:
       - name: Terraform Init, Validate & Plan
         id: terraform-init-validate-plan
         run: |
+          terraform init \
+          -backend-config="storage_account_name=${ARM_BACKEND_STORAGE_ACCOUNT}" \
+          -backend-config="container_name=${ARM_BACKEND_BLOB_CONTAINER_NAME}" \
+          -backend-config="key=${ARM_BACKEND_STATE_KEY}" && \
           terraform workspace new ${terraform_workspace} || terraform workspace select $terraform_workspace
-          terraform init && \
           terraform validate && \
           terraform plan -out tfplan
 
