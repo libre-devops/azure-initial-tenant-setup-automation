@@ -37,15 +37,22 @@ jobs:
         run: |
           brew install tfenv tfsec
 
-      - name: Setup Tfenv
+      - name: Setup Tfenv and Install terraform
         id: setup-tfenv
         run: |
+          if [ -z "$terraform-version" ]; then
+            echo "terraform-version is empty or not set., setting to latest" && export terraform-version="latest"
+          
+          else
+            echo "Installing terraform version $terraform-version"
+          fi
+
           tfenv install ${{ env.terraform-version }} && tfenv use ${{ env.terraform-version }}
 
       - name: Terraform Init, Validate & Plan
         id: terraform-init-validate-plan
         run: |
-          terraform workspace ${{ env.terraform-workspace }} || terraform workspace select ${{ env.terraform-workspace }} && \
+          terraform workspace new ${{ env.terraform-workspace }} || terraform workspace select ${{ env.terraform-workspace }} && \
           terraform init && \
           terraform validate && \
           terraform plan -out tfplan
