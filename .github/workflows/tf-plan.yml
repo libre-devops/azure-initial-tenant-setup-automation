@@ -42,8 +42,8 @@ jobs:
         run: |
           tfenv install ${{ env.terraform-version }} && tfenv use ${{ env.terraform-version }}
 
-      - name: Terraform Init
-        id: terraform init
+      - name: Terraform Init, Validate & Plan
+        id: terraform-init-validate-plan
         run: |
           terraform workspace select ${{ env.terraform-workspace }} || terraform workspace ${{ env.terraform-workspace }} && \
           terraform init && \
