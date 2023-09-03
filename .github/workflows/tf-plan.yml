@@ -45,7 +45,7 @@ jobs:
       - name: Terraform Init, Validate & Plan
         id: terraform-init-validate-plan
         run: |
-          terraform workspace select ${{ env.terraform-workspace }} || terraform workspace ${{ env.terraform-workspace }} && \
+          terraform workspace ${{ env.terraform-workspace }} || terraform workspace select ${{ env.terraform-workspace }} && \
           terraform init && \
           terraform validate && \
           terraform plan -out tfplan
