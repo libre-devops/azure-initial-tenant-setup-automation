@@ -10,7 +10,6 @@ jobs:
     name: 'Terraform Build'
     runs-on: ubuntu-latest
     env:
-      terraform-version: "1.5.5"
       terraform-workspace: "prd"
       checkov-skipped-tests: ""
       terraform-compliance-policy-path: "https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
