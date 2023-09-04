@@ -6,7 +6,3 @@ resource "azurecaf_name" "subscription" {
   random_length = 5
   clean_input   = true
 }
-
-output "test" {
-  value = azurecaf_name.subscription.result
-}
