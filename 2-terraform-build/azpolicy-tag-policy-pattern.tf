@@ -1,6 +1,5 @@
 resource "azurerm_policy_definition" "mandatory_tag_match_pattern" {
-
-  name                = "TagResourcesMatch"
+  name                = "pdef-TagResourcesMatch"
   policy_type         = "Custom"
   mode                = "Indexed"
   display_name        = "Resources must match the ManagedBy tag - Definition"

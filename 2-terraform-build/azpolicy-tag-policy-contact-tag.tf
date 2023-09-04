@@ -1,5 +1,5 @@
 resource "azurerm_policy_definition" "mandatory_tag_contact_email" {
-  name                = "MandatoryTagContactEmail"
+  name                = "pdef-MandatoryTagContactEmail"
   policy_type         = "Custom"
   mode                = "Indexed"
   display_name        = "Resources Must Contain 'Contact' Tag - Definition"

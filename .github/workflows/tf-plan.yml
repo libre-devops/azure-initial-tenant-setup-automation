@@ -14,7 +14,7 @@ jobs:
       terraform_version: "1.5.5"
       terraform_workspace: "prd"
       checkov_skipped_tests: ""
-      terraform_compliance_policy_path: "https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
+      terraform_compliance_policy_path: "git:https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
       ARM_CLIENT_ID: ${{ secrets.SpokeSvpClientId }}
       ARM_CLIENT_SECRET: ${{ secrets.SpokeSvpClientSecret }}
       ARM_TENANT_ID: ${{ secrets.SpokeTenantId }}
@@ -37,10 +37,10 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Install Tfenv
+      - name: Install Tfsev, TfSec, Terraform-Compliance & CheckOv
         id: install-packages
         run: |
-          brew install tfenv tfsec
+          brew install tfenv tfsec && pip3 install terraform-compliance checkov
 
       - name: Setup Tfenv and Install terraform
         id: setup-tfenv
@@ -65,9 +65,24 @@ jobs:
           terraform validate && \
           terraform plan -out tfplan
 
-      - name: terraform-compliance
+      - name: Terraform-Compliance Check
         id: terraform-compliance-check
-        uses: terraform-compliance/github_action@0.3.0
-        with:
-          plan: "${{ env.working_directory }}/tfplan"
-          features: ${{ env.terraform_compliance_policy_path }}
+        run : |
+          terraform-compliance -p "tfplan" -f "${terraform_compliance_policy_path}"
+
+      - name: TFSec Check
+        id: tfsec-check
+        run : |
+          tfsec . --force-all-dirs
+
+      - name: CheckOv Check
+        id: checkov-check
+        run : |
+          terraform show -json tfplan | tee tfplan.json >/dev/null
+          checkov -f tfplan.json --skip-check "${checkov_skipped_test}"
+
+      - name: Cleanup tfplan
+        id: cleanup-tfplan
+        run: |
+          rm -rf tfplan*
+          
