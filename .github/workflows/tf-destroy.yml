@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  azure-terraform-apply-job:
+  azure-terraform-destroy-job:
     name: 'Terraform Destroy'
     runs-on: ubuntu-latest
     env:
