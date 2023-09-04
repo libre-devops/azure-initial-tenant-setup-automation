@@ -4,6 +4,9 @@ data "azurerm_subscription" "current" {
   subscription_id = data.azurerm_client_config.current.subscription_id
 }
 
+data "azurerm_subscriptions" "available" {
+}
+
 data "azurerm_resource_group" "mgmt_rg" {
   name = "rg-${var.short}-${var.loc}-prd-mgmt"
 }

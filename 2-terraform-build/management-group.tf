@@ -10,12 +10,14 @@ resource "azurerm_management_group" "mg_libredevops_mgmt" {
   ]
 }
 
+locals {
+  filtered_subscriptions = [for s in data.azurerm_subscriptions.available.subscriptions : s.subscription_id if length(regexall("^(libredevops-|decom-)", s.display_name)) > 0]
+}
+
 resource "azurerm_management_group" "mg_libredevops_decommissioned" {
   parent_management_group_id = azurerm_management_group.mg_libredevops_parent.id
   display_name               = "mg-libredevops-decommissioned"
-
-  subscription_ids = [
-  ]
+  subscription_ids           = local.filtered_subscriptions
 }
 
 resource "azurerm_management_group" "mg_libredevops_dev" {
@@ -43,9 +45,9 @@ resource "azurerm_management_group" "mg_libredevops_ppd" {
   parent_management_group_id = azurerm_management_group.mg_libredevops_parent.id
   display_name               = "mg-libredevops-ppd"
 
-  subscription_ids = [
-    azurerm_subscription.ppd_subscription[count.index].subscription_id
-  ]
+#  subscription_ids = [
+#    azurerm_subscription.ppd_subscription[count.index].subscription_id
+#  ]
 }
 
 resource "azurerm_management_group" "mg_libredevops_prd" {

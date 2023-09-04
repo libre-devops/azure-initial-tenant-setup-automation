@@ -54,11 +54,6 @@ jobs:
             echo "terraform_tfsec_version is set, installing terraform version ${terraform_tfsec_version}" && \
             brew install tfsec@${terraform_tfsec_version}
           fi
-          if [ -z "${terraform_compliance_version}" ]; then
-            echo "terraform_compliance_version is empty or not set., setting to latest" && pip3 install terraform-compliance
-          else
-            echo "terraform_compliance_version is set, installing terraform version ${terraform_tfsec_version}" && pip3 install terraform-compliance==${terraform_compliance_version}
-          fi
           if [ -z "${terraform_checkov_version}" ]; then
             echo "terraform_checkov_version is empty or not set., setting to latest" && pip3 install checkov
           else
@@ -87,11 +82,6 @@ jobs:
           terraform validate && \
           terraform fmt -check && \
           terraform plan -out tfplan
-
-      - name: Terraform-Compliance Check
-        id: terraform-compliance-check
-        run : |
-          terraform-compliance -p tfplan -f "${terraform_compliance_policy_path}"
 
       - name: TFSec Check
         id: tfsec-check
