@@ -10,6 +10,7 @@ jobs:
     name: 'Terraform Build'
     runs-on: ubuntu-latest
     env:
+      working_directory: 2-terraform-build
       terraform_version: "1.5.5"
       terraform_workspace: "prd"
       checkov_skipped_tests: ""
@@ -27,7 +28,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: 2-terraform-build
+        working-directory: ${{ env.working_directory }}
 
     steps:
       - uses: actions/checkout@v3
@@ -67,6 +68,7 @@ jobs:
       - name: terraform-compliance
         id: terraform-compliance-check
         uses: terraform-compliance/github_action@0.3.0
+        working-directory: ${{ env.working_directory }}
         with:
           plan: "tfplan"
           features: ${{ env.terraform_compliance_policy_path }}
