@@ -460,6 +460,11 @@ Set-AzKeyVaultSecret `
    -Name "SpokeSaName" `
    -SecretValue $spokeSaName
 
+Set-AzKeyVaultSecret `
+   -VaultName $KeyvaultName `
+   -Name "SpokeSaBlobContainerName" `
+   -SecretValue $BlobContainerName
+
 $KeyExpiryDate = (Get-Date).AddMonths(3).ToUniversalTime()
 Set-AzKeyVaultSecret `
    -VaultName $KeyvaultName `
