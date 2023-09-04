@@ -5,5 +5,5 @@ locals {
     Contact     = "help@libredevops.org"
   }
 
-  tags = merge(var.tags, local.module_tags)
+  tags = merge(local.module_tags, var.tags)
 }
