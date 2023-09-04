@@ -58,5 +58,7 @@ locals {
 variable "tags" {
   type        = map(string)
   description = "The tags variable"
-  default     = {}
+  default     = {
+    "CostCentre" = "671888"
+  }
 }
