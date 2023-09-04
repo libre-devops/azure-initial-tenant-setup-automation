@@ -68,7 +68,6 @@ jobs:
       - name: terraform-compliance
         id: terraform-compliance-check
         uses: terraform-compliance/github_action@0.3.0
-        working-directory: ${{ env.working_directory }}
         with:
-          plan: "tfplan"
+          plan: "${{ env.working_directory }}/tfplan"
           features: ${{ env.terraform_compliance_policy_path }}
