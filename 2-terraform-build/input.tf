@@ -28,27 +28,27 @@ variable "Regions" {
 }
 
 variable "dev_subscriptions_needed" {
-  type = number
+  type        = number
   description = "The number of subscriptions to be made"
-  default = 1
+  default     = 1
 }
 
 variable "uat_subscriptions_needed" {
-  type = number
+  type        = number
   description = "The number of subscriptions to be made"
-  default = 1
+  default     = 1
 }
 
 variable "ppd_subscriptions_needed" {
-  type = number
+  type        = number
   description = "The number of subscriptions to be made"
-  default = 1
+  default     = 1
 }
 
 variable "prd_subscriptions_needed" {
-  type = number
+  type        = number
   description = "The number of subscriptions to be made"
-  default = 1
+  default     = 1
 }
 
 locals {

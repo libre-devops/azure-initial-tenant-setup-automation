@@ -11,10 +11,10 @@ locals {
 variable "tags" {
   type        = map(string)
   description = "The tags variable"
-  default     = {
-    "CostCentre"  = "671888"
-    "ManagedBy"   = "Terraform"
-    "Contact"     = "help@libredevops.org"
+  default = {
+    "CostCentre" = "671888"
+    "ManagedBy"  = "Terraform"
+    "Contact"    = "help@libredevops.org"
   }
 }
 

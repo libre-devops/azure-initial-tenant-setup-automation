@@ -63,7 +63,8 @@ jobs:
           -backend-config="key=${ARM_BACKEND_STATE_KEY}" && \
           terraform workspace new ${terraform_workspace} || terraform workspace select $terraform_workspace
           terraform validate && \
-          terraform plan -destroy -out tfplan
+          terraform plan -destroy -out tfplan && \
+          terraform fmt -check
 
       - name: Terraform Destroy
         id: terraform-destroy
