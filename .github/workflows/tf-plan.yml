@@ -91,6 +91,7 @@ jobs:
       - name: Terraform-Compliance Check
         id: terraform-compliance-check
         run : |
+          tree .
           terraform-compliance -p "tfplan" -f "${terraform_compliance_policy_path}"
 
       - name: TFSec Check
