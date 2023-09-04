@@ -101,7 +101,7 @@ jobs:
         id: checkov-check
         run : |
           terraform show -json tfplan | tee tfplan.json >/dev/null
-          checkov -f tfplan.json --skip-check "${checkov_skipped_test}"
+          checkov -f tfplan.json --skip-check "${checkov_skipped_tests}"
 
       - name: Cleanup tfplan
         id: cleanup-tfplan
