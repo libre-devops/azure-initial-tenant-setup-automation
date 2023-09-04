@@ -1,4 +1,4 @@
-name: 'Terraform Apply'
+name: 'Terraform Plan - With Terraform Compliance'
 
 # Allow run manually
 on:
@@ -6,8 +6,8 @@ on:
 
 
 jobs:
-  azure-terraform-apply-job:
-    name: 'Terraform Apply'
+  azure-terraform-plan-job:
+    name: 'Terraform Plan'
     runs-on: ubuntu-latest
     env:
       working_directory: 2-terraform-build
@@ -37,7 +37,7 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Install Tfsev, TfSec, & CheckOv
+      - name: Install Tfsev, TfSec, Terraform-Compliance & CheckOv
         id: install-packages
         run: |
           if [ -z "${terraform_tfenv_version}" ]; then
@@ -54,12 +54,16 @@ jobs:
             echo "terraform_tfsec_version is set, installing terraform version ${terraform_tfsec_version}" && \
             brew install tfsec@${terraform_tfsec_version}
           fi
+          if [ -z "${terraform_compliance_version}" ]; then
+            echo "terraform_compliance_version is empty or not set., setting to latest" && pip3 install terraform-compliance
+          else
+            echo "terraform_compliance_version is set, installing terraform version ${terraform_tfsec_version}" && pip3 install terraform-compliance==${terraform_compliance_version}
+          fi
           if [ -z "${terraform_checkov_version}" ]; then
             echo "terraform_checkov_version is empty or not set., setting to latest" && pip3 install checkov
           else
             echo "terraform_checkov_version is set, installing terraform version ${terraform_tfsec_version}" && pip3 install checkov==${terraform_checkov_version}
           fi
-
       - name: Setup Tfenv and Install terraform
         id: setup-tfenv
         run: |
@@ -87,7 +91,7 @@ jobs:
       - name: Terraform-Compliance Check
         id: terraform-compliance-check
         run : |
-          terraform-compliance -p "tfplan" -f "${terraform_compliance_policy_path}"
+          terraform-compliance -p tfplan -f "${terraform_compliance_policy_path}"
 
       - name: TFSec Check
         id: tfsec-check
@@ -99,11 +103,6 @@ jobs:
         run : |
           terraform show -json tfplan | tee tfplan.json >/dev/null
           checkov -f tfplan.json --skip-check "${checkov_skipped_test}"
-
-      - name: Terraform Apply
-        id: terraform-apply-plan
-        run: |
-          terraform apply -auto-approve tfplan
 
       - name: Cleanup tfplan
         id: cleanup-tfplan

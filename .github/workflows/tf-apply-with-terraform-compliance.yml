@@ -1,4 +1,4 @@
-name: 'Terraform Apply'
+name: 'Terraform Apply with Terraform-Compliance'
 
 # Allow run manually
 on:
@@ -37,7 +37,7 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Install Tfsev, TfSec, & CheckOv
+      - name: Install Tfsev, TfSec, Terraform-Compliance & CheckOv
         id: install-packages
         run: |
           if [ -z "${terraform_tfenv_version}" ]; then
@@ -53,6 +53,11 @@ jobs:
           else
             echo "terraform_tfsec_version is set, installing terraform version ${terraform_tfsec_version}" && \
             brew install tfsec@${terraform_tfsec_version}
+          fi
+          if [ -z "${terraform_compliance_version}" ]; then
+            echo "terraform_compliance_version is empty or not set., setting to latest" && pip3 install terraform-compliance
+          else
+            echo "terraform_compliance_version is set, installing terraform version ${terraform_tfsec_version}" && pip3 install terraform-compliance==${terraform_compliance_version}
           fi
           if [ -z "${terraform_checkov_version}" ]; then
             echo "terraform_checkov_version is empty or not set., setting to latest" && pip3 install checkov
