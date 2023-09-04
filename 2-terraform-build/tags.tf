@@ -1,14 +1,23 @@
-locals {
-  module_tags = {
-    "LastUpdated" = formatdate("DD-MM-YYYY:hh:mm", timestamp())
-    "Environment" = "${terraform.workspace}"
-  }
-
-  tags = merge(local.module_tags, var.tags)
+data "external" "detect_os" {
+  working_dir = path.module
+  program     = ["printf", "{\"os\": \"Linux\"}"]
 }
 
+locals {
+  dynamic_tags = {
+    "LastUpdated" = data.external.generate_timestamp.result["timestamp"]
+    "Environment" = terraform.workspace
+  }
 
-variable "tags" {
+  os   = data.external.detect_os.result.os
+  tags = merge(var.static_tags, local.dynamic_tags)
+}
+
+data "external" "generate_timestamp" {
+  program = local.os == "Linux" ? ["${path.module}/timestamp.sh"] : ["powershell", "${path.module}/timestamp.ps1"]
+}
+
+variable "static_tags" {
   type        = map(string)
   description = "The tags variable"
   default = {
@@ -16,8 +25,4 @@ variable "tags" {
     "ManagedBy"  = "Terraform"
     "Contact"    = "help@libredevops.org"
   }
-}
-
-output "tags" {
-  value = local.tags
 }
