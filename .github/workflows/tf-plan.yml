@@ -6,8 +6,8 @@ on:
 
 
 jobs:
-  azure-terraform-job:
-    name: 'Terraform Build'
+  azure-terraform-plan-job:
+    name: 'Terraform Plan'
     runs-on: ubuntu-latest
     env:
       working_directory: 2-terraform-build

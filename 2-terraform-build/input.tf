@@ -54,11 +54,3 @@ variable "prd_subscriptions_needed" {
 locals {
   location = lookup(var.Regions, var.loc, "UK South")
 }
-
-variable "tags" {
-  type        = map(string)
-  description = "The tags variable"
-  default     = {
-    "CostCentre" = "671888"
-  }
-}
