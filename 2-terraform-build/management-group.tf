@@ -45,9 +45,9 @@ resource "azurerm_management_group" "mg_libredevops_ppd" {
   parent_management_group_id = azurerm_management_group.mg_libredevops_parent.id
   display_name               = "mg-libredevops-ppd"
 
-#  subscription_ids = [
-#    azurerm_subscription.ppd_subscription[count.index].subscription_id
-#  ]
+  #  subscription_ids = [
+  #    azurerm_subscription.ppd_subscription[count.index].subscription_id
+  #  ]
 }
 
 resource "azurerm_management_group" "mg_libredevops_prd" {
