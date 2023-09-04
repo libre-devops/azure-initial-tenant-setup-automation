@@ -40,7 +40,35 @@ jobs:
       - name: Install Tfsev, TfSec, Terraform-Compliance & CheckOv
         id: install-packages
         run: |
-          brew install tfenv tfsec && pip3 install terraform-compliance checkov
+          if [ -z "${terraform_tfenv_version}" ]; then
+            echo "terraform_tfenv_version is empty or not set., setting to latest" && export terraform_tfenv_version="latest"
+
+          else
+            echo "terraform_tfenv_version is set, installing terraform version ${terraform_tfenv_version}"
+          fi
+          if [ -z "${terraform_tfsec_version}" ]; then
+            echo "terraform_tfsec_version is empty or not set., setting to latest" && export terraform_tfsec_version="latest"
+
+          else
+            echo "terraform_tfsec_version is set, installing terraform version ${terraform_tfsec_version}"
+          fi
+          if [ -z "${terraform_compliance_version}" ]; then
+            echo "terraform_compliance_version is empty or not set., setting to latest" && pip3 install terraform-compliance
+
+          else
+            echo "terraform_compliance_version is set, installing terraform version ${terraform_tfsec_version}" && pip3 install terraform-compliance==${terraform_compliance_version}
+          fi
+          if [ -z "${terraform_checkov_version}" ]; then
+            echo "terraform_checkov_version is empty or not set., setting to latest" && pip3 install checkov
+
+          else
+            echo "terraform_checkov_version is set, installing terraform version ${terraform_tfsec_version}" && pip3 install checkov==${terraform_checkov_version}
+          fi
+
+
+          brew install \
+          tfenv@${terraform_tfenv_version} \
+          tfsec@${terraform_tfsec_version} 
 
       - name: Setup Tfenv and Install terraform
         id: setup-tfenv
