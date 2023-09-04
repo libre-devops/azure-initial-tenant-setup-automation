@@ -17,3 +17,7 @@ variable "tags" {
     "Contact"     = "help@libredevops.org"
   }
 }
+
+output "tags" {
+  value = local.tags
+}

@@ -14,7 +14,7 @@ jobs:
       terraform_version: "1.5.5"
       terraform_workspace: "prd"
       checkov_skipped_tests: ""
-      terraform_compliance_policy_path: "git:https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
+      terraform_compliance_spolicy_path: "git:https://github.com/libre-devops/azure-naming-convention.git//?ref=main"
       ARM_CLIENT_ID: ${{ secrets.SpokeSvpClientId }}
       ARM_CLIENT_SECRET: ${{ secrets.SpokeSvpClientSecret }}
       ARM_TENANT_ID: ${{ secrets.SpokeTenantId }}
