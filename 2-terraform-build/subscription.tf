@@ -18,7 +18,7 @@ resource "azurerm_subscription" "ppd_subscription" {
   count             = var.ppd_subscriptions_needed
   subscription_name = "sub-${var.short}-${var.loc}-ppd-${format("%02d", count.index + 1)}"
   billing_scope_id  = data.azurerm_billing_mca_account_scope.this.id
-  tags              = azurerm_subscription.dev_subscription.tags
+  tags              = azurerm_subscription.dev_subscription[0].tags
 }
 
 #resource "azurerm_subscription" "prd_subscription" {
