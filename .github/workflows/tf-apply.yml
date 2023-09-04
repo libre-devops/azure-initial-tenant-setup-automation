@@ -21,7 +21,7 @@ jobs:
       ARM_USE_AZUREAD: true
       ARM_BACKEND_STORAGE_ACCOUNT: ${{ secrets.SpokeSaName }}
       ARM_BACKEND_BLOB_CONTAINER_NAME: ${{ secrets.SpokeSaBlobContainerName }}
-      ARM_BACKEND_STATE_KEY: "vss-migration-0-pre-req.terraform.tfstate"
+      ARM_BACKEND_STATE_KEY: "management-setup.terraform.tfstate"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
