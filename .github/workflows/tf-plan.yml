@@ -85,14 +85,14 @@ jobs:
           -backend-config="key=${ARM_BACKEND_STATE_KEY}" && \
           terraform workspace new ${terraform_workspace} || terraform workspace select $terraform_workspace
           terraform validate && \
-          terraform plan -out tfplan && \
           terraform fmt -check
+          terraform plan -out tfplan
 
       - name: Terraform-Compliance Check
         id: terraform-compliance-check
         run : |
           tree .
-          terraform-compliance -p "tfplan" -f "${terraform_compliance_policy_path}"
+          terraform-compliance -p tfplan -f "${terraform_compliance_policy_path}"
 
       - name: TFSec Check
         id: tfsec-check
