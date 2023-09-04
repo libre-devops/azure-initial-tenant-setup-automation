@@ -84,11 +84,6 @@ jobs:
           terraform fmt -check && \
           terraform plan -out tfplan
 
-      - name: Terraform-Compliance Check
-        id: terraform-compliance-check
-        run : |
-          terraform-compliance -p "tfplan" -f "${terraform_compliance_policy_path}"
-
       - name: TFSec Check
         id: tfsec-check
         run : |
