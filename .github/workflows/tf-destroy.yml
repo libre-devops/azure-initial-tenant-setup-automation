@@ -37,17 +37,16 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Install Tfenv
+      - name: Install Tfsev, TfSec, Terraform-Compliance & CheckOv
         id: install-packages
         run: |
           if [ -z "${terraform_tfenv_version}" ]; then
-            echo "terraform_tfenv_version is empty or not set., setting to latest" && export terraform_tfenv_version="latest"
-
+            echo "terraform_tfenv_version is empty or not set., setting to latest" && export terraform_tfenv_version="latest" && \
+            brew install tfenv
           else
-            echo "terraform_tfenv_version is set, installing terraform version ${terraform_tfenv_version}"
+            echo "terraform_tfenv_version is set, installing terraform version ${terraform_tfenv_version}" && \
+            brew install tfenv@${terraform_tfenv_version}
           fi
-          brew install \
-          tfenv@${terraform_tfenv_version}
 
       - name: Setup Tfenv and Install terraform
         id: setup-tfenv
