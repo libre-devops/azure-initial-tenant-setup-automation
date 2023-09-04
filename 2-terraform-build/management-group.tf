@@ -33,9 +33,9 @@ resource "azurerm_management_group" "mg_libredevops_uat" {
   parent_management_group_id = azurerm_management_group.mg_libredevops_parent.id
   display_name               = "mg-libredevops-uat"
 
-#  subscription_ids = [
-#    azurerm_subscription.uat_subscription[count.index].subscription_id
-#  ]
+  #  subscription_ids = [
+  #    azurerm_subscription.uat_subscription[count.index].subscription_id
+  #  ]
 }
 
 resource "azurerm_management_group" "mg_libredevops_ppd" {
@@ -53,7 +53,7 @@ resource "azurerm_management_group" "mg_libredevops_prd" {
   parent_management_group_id = azurerm_management_group.mg_libredevops_parent.id
   display_name               = "mg-libredevops-prd"
 
-#  subscription_ids = [
-#    azurerm_subscription.prd_subscription[count.index].subscription_id
-#  ]
+  #  subscription_ids = [
+  #    azurerm_subscription.prd_subscription[count.index].subscription_id
+  #  ]
 }
