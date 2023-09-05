@@ -22,6 +22,8 @@ jobs:
       ARM_BACKEND_STORAGE_ACCOUNT: ${{ secrets.SpokeSaName }}
       ARM_BACKEND_BLOB_CONTAINER_NAME: ${{ secrets.SpokeSaBlobContainerName }}
       ARM_BACKEND_STATE_KEY: "management-setup.terraform.tfstate"
+      AZDO_ORG_SERVICE_URL: "https://dev.azure.com/libredevops"
+      AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AzdoAdminPat }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -86,12 +88,13 @@ jobs:
           terraform workspace new ${terraform_workspace} || terraform workspace select $terraform_workspace
           terraform validate && \
           terraform fmt -check && \
-          terraform plan -out tfplan
+          terraform plan -out tfplan.plan
+          terraform show -json tfplan.plan | tee tfplan.json >/dev/null
 
       - name: Terraform-Compliance Check
         id: terraform-compliance-check
         run : |
-          terraform-compliance -p "tfplan" -f "${terraform_compliance_policy_path}"
+          terraform-compliance -p "tfplan.json" -f "${terraform_compliance_policy_path}"
 
       - name: TFSec Check
         id: tfsec-check
@@ -101,13 +104,12 @@ jobs:
       - name: CheckOv Check
         id: checkov-check
         run : |
-          terraform show -json tfplan | tee tfplan.json >/dev/null
           checkov -f tfplan.json --skip-check "${checkov_skipped_tests}"
 
       - name: Terraform Apply
         id: terraform-apply-plan
         run: |
-          terraform apply -auto-approve tfplan
+          terraform apply -auto-approve tfplan.plan
 
       - name: Cleanup tfplan
         id: cleanup-tfplan

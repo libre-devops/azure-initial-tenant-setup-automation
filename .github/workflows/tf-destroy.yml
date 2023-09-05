@@ -22,6 +22,8 @@ jobs:
       ARM_BACKEND_STORAGE_ACCOUNT: ${{ secrets.SpokeSaName }}
       ARM_BACKEND_BLOB_CONTAINER_NAME: ${{ secrets.SpokeSaBlobContainerName }}
       ARM_BACKEND_STATE_KEY: "management-setup.terraform.tfstate"
+      AZDO_ORG_SERVICE_URL: "https://dev.azure.com/libredevops"
+      AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AzdoAdminPat }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -68,13 +70,13 @@ jobs:
           -backend-config="key=${ARM_BACKEND_STATE_KEY}" && \
           terraform workspace new ${terraform_workspace} || terraform workspace select $terraform_workspace
           terraform validate && \
-          terraform plan -destroy -out tfplan && \
+          terraform plan -destroy -out tfplan.plan && \
           terraform fmt -check
 
       - name: Terraform Destroy
         id: terraform-destroy
         run: |
-          terraform apply -auto-approve tfplan
+          terraform apply -auto-approve tfplan.plan
 
       - name: Cleanup tfplan
         id: cleanup-tfplan
